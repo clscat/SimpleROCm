@@ -1,0 +1,20 @@
+#/bin/bash
+
+set -e
+
+do_ldconfig() {
+    echo @CPACK_PACKAGING_INSTALL_PREFIX@/hsa/lib > /etc/ld.so.conf.d/hsa-rocr-dev.conf && ldconfig
+}
+
+case "$1" in
+   configure)
+       do_ldconfig
+       ln -sf ../hsa/include/hsa @CPACK_PACKAGING_INSTALL_PREFIX@/include/hsa
+   ;;
+   abort-upgrade|abort-remove|abort-deconfigure)
+       echo "$1"
+   ;;
+   *)
+       exit 0
+   ;;
+esac
